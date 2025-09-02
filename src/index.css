@@ -1,46 +1,41 @@
 @import "tailwindcss";
-
-/* Custom Leaflet Marker Styles */
-
 .marker-pin {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: #49e;
+    width: 25px;
+    height: 25px;
+    border-radius: 50% 50% 50% 0;
+    background: #c32525;
+    /* Fallback color */
     position: absolute;
-    border: 2px solid #fff;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    animation: bounce 1s infinite alternate;
+    transform: rotate(-45deg);
+    left: 50%;
+    top: 50%;
+    margin: -15px 0 0 -15px;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    animation: bounce 1.5s infinite ease-out;
 }
 
 .marker-pin-pulse {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.2);
     border-radius: 50%;
-    height: 30px;
-    width: 30px;
+    height: 14px;
+    width: 14px;
     position: absolute;
-    margin-top: -5px;
-    margin-left: -5px;
-    animation: pulse 2s infinite;
-    z-index: -1;
+    left: 50%;
+    top: 50%;
+    margin: 11px 0px 0px -12px;
+    transform: rotateX(55deg);
+    z-index: -2;
 }
 
 @keyframes bounce {
-    from {
-        transform: translateY(0);
-    }
-    to {
-        transform: translateY(-5px);
-    }
-}
-
-@keyframes pulse {
     0% {
-        transform: scale(0.5);
-        opacity: 1;
+        transform: rotate(-45deg) translateY(0);
+    }
+    50% {
+        transform: rotate(-45deg) translateY(-10px);
     }
     100% {
-        transform: scale(2);
-        opacity: 0;
+        transform: rotate(-45deg) translateY(0);
     }
 }
