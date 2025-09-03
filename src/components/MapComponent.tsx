@@ -1,7 +1,7 @@
-import { MapContainer, TileLayer, Marker, Popup, Polygon } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polygon, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css'; // Make sure to import Leaflet's CSS
 import type { DrainData } from '../data/mockData';
-import L from 'leaflet';
+import L, { type PathOptions } from 'leaflet';
 
 
 // Fix for default marker icon issue with webpack
@@ -32,6 +32,8 @@ interface MapProps {
   drains: DrainData[];
   onSelectDrain: (drain: DrainData) => void;
   showPrediction: boolean;
+  showRoute: boolean;
+  safeRouteOptions: PathOptions;
 }
 const floodZoneOptions = {
   fillColor: 'red',
@@ -43,7 +45,7 @@ const floodZoneOptions = {
 
 
 
-export default function MapComponent({ drains, onSelectDrain, showPrediction }: MapProps) {
+export default function MapComponent({ drains, onSelectDrain, showPrediction, showRoute, safeRouteOptions }: MapProps) {
   const position: [number, number] = [6.5244, 3.3792]; // Centered on Lagos
 
   return (
@@ -82,6 +84,13 @@ export default function MapComponent({ drains, onSelectDrain, showPrediction }: 
               </Popup>
             </Polygon>
           );
+        }
+        return null;
+      })}
+
+      {showRoute && drains.map(drain => {
+        if (drain.status === 'High Risk' && drain.safeRoute) {
+          return <Polyline key={`route-${drain.id}`} positions={drain.safeRoute} pathOptions={safeRouteOptions} />;
         }
         return null;
       })}

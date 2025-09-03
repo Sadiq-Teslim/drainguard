@@ -13,11 +13,18 @@ const statusInfo = {
 };
 
 export default function DrainStatusPanel({ drains, onSelectDrain }: StatusPanelProps) {
+
+  const statusOrder = { 'High Risk': 0, 'Moderate': 1, 'Safe': 2 };
+
+  const sortedDrains = [...drains].sort((a, b) => {
+    return statusOrder[a.status] - statusOrder[b.status];
+  });
+
   return (
     <div className="bg-white rounded-lg shadow-md p-4">
       <h2 className="text-xl font-bold mb-4">Drainage Status</h2>
       <ul className="space-y-3 max-h-[40vh] overflow-y-auto">
-        {drains.map(drain => {
+        {sortedDrains.map(drain => {
           const { icon: Icon, color, bg } = statusInfo[drain.status];
           return (
             <li
