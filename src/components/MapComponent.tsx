@@ -1,7 +1,8 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polygon } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css'; // Make sure to import Leaflet's CSS
 import type { DrainData } from '../data/mockData';
 import L from 'leaflet';
+
 
 // Fix for default marker icon issue with webpack
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -30,37 +31,19 @@ const getIcon = (status: DrainData['status']) => {
 interface MapProps {
   drains: DrainData[];
   onSelectDrain: (drain: DrainData) => void;
+  showPrediction: boolean;
 }
+const floodZoneOptions = {
+  fillColor: 'red',
+  color: 'red',
+  weight: 2,
+  opacity: 0.8,
+  fillOpacity: 0.3,
+};
 
-// Add some CSS in `src/index.css` for the custom marker
-/*
-.marker-pin {
-  width: 20px;
-  height: 20px;
-  border-radius: 50% 50% 50% 0;
-  background: #c32525;
-  position: absolute;
-  transform: rotate(-45deg);
-  left: 50%;
-  top: 50%;
-  margin: -10px 0 0 -10px;
-  border: 2px solid white;
-}
-.marker-pin-pulse {
-  background: rgba(0,0,0,0.2);
-  border-radius: 50%;
-  height: 14px;
-  width: 14px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin: 11px 0px 0px -12px;
-  transform: rotateX(55deg);
-  z-index: -2;
-}
-*/
 
-export default function MapComponent({ drains, onSelectDrain }: MapProps) {
+
+export default function MapComponent({ drains, onSelectDrain, showPrediction }: MapProps) {
   const position: [number, number] = [6.5244, 3.3792]; // Centered on Lagos
 
   return (
@@ -87,6 +70,21 @@ export default function MapComponent({ drains, onSelectDrain }: MapProps) {
           </Popup>
         </Marker>
       ))}
+
+      {showPrediction && drains.map(drain => {
+        if (drain.status === 'High Risk' && drain.floodZone) {
+          return (
+            <Polygon key={`poly-${drain.id}`} pathOptions={floodZoneOptions} positions={drain.floodZone}>
+              <Popup>
+                <b>Predicted Flood Zone</b><br />
+                Triggered by: {drain.locationName}<br />
+                Risk Level: HIGH
+              </Popup>
+            </Polygon>
+          );
+        }
+        return null;
+      })}
     </MapContainer>
   );
 }

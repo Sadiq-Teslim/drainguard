@@ -7,6 +7,7 @@ export interface DrainData {
   flowSpeed: number; // in m/s
   blockage: boolean;
   history: { time: string; level: number }[];
+  floodZone?: [number, number][];
 }
 
 export const drains: DrainData[] = [
@@ -23,7 +24,13 @@ export const drains: DrainData[] = [
       { time: '11:00', level: 65 },
       { time: '12:00', level: 75 },
       { time: '13:00', level: 85 },
-    ]
+    ],
+    floodZone: [
+      [6.5050, 3.3570], // Top-left corner
+      [6.5055, 3.3615], // Top-right corner
+      [6.5005, 3.3620], // Bottom-right corner
+      [6.5000, 3.3575], // Bottom-left corner
+    ],
   },
   {
     id: 2,
