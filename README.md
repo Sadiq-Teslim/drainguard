@@ -60,8 +60,8 @@ This web app is a **high-fidelity simulation** of DrainGuard AI in action.
 1. **Clone the repo**
 
 ```bash
-git clone https://github.com/your-username/drainguard-ai-dashboard.git
-cd drainguard-ai-dashboard
+git clone https://github.com/Sadiq-Teslim/drainguard.git
+cd drainguard
 ```
 
 2. **Install dependencies**
