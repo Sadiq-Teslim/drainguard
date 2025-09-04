@@ -32,8 +32,11 @@ interface MapProps {
   drains: DrainData[];
   onSelectDrain: (drain: DrainData) => void;
   showPrediction: boolean;
-  showRoute: boolean;
+  showRoute?: boolean;
   safeRouteOptions: PathOptions;
+  center?: [number, number];
+  zoom?: number;
+  children?: React.ReactNode; // To allow passing in extra markers
 }
 const floodZoneOptions = {
   fillColor: 'red',
@@ -45,11 +48,11 @@ const floodZoneOptions = {
 
 
 
-export default function MapComponent({ drains, onSelectDrain, showPrediction, showRoute, safeRouteOptions }: MapProps) {
-  const position: [number, number] = [6.5244, 3.3792]; // Centered on Lagos
-
+export default function MapComponent({ drains, onSelectDrain, showPrediction, showRoute, safeRouteOptions, center, zoom, children }: MapProps) {
+    const mapCenter = center || [6.5244, 3.3792];
+  const mapZoom = zoom || 11;
   return (
-    <MapContainer center={position} zoom={11} style={{ height: '100%', width: '100%' }}>
+    <MapContainer center={mapCenter} zoom={mapZoom} style={{ height: '100%', width: '100%' }}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -94,6 +97,7 @@ export default function MapComponent({ drains, onSelectDrain, showPrediction, sh
         }
         return null;
       })}
+      {children}
     </MapContainer>
   );
 }
